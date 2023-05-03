@@ -53,6 +53,8 @@ private:
     ppx::grfx::ImagePtr               mImage;
     ppx::grfx::SamplerPtr             mSampler;
     ppx::grfx::SampledImageViewPtr    mSampledImageView;
+    grfx::Viewport                    mViewport;
+    grfx::Rect                        mScissorRect;
     grfx::VertexBinding               mVertexBinding;
 };
 
@@ -255,6 +257,9 @@ void ProjApp::Setup()
         mVertexBuffer->UnmapMemory();
     }
 
+    // Viewport and scissor rect
+    mViewport    = {0, 0, float(GetWindowWidth()), float(GetWindowHeight()), 0, 1};
+    mScissorRect = {0, 0, GetWindowWidth(), GetWindowHeight()};
 }
 
 void ProjApp::Render()
@@ -336,8 +341,8 @@ void ProjApp::Render()
         frame.cmd->TransitionImageLayout(renderPass->GetRenderTargetImage(0), PPX_ALL_SUBRESOURCES, grfx::RESOURCE_STATE_PRESENT, grfx::RESOURCE_STATE_RENDER_TARGET);
         frame.cmd->BeginRenderPass(&beginInfo);
         {
-            frame.cmd->SetScissors(GetScissor());
-            frame.cmd->SetViewports(GetViewport());
+            frame.cmd->SetScissors(1, &mScissorRect);
+            frame.cmd->SetViewports(1, &mViewport);
             frame.cmd->BindGraphicsPipeline(mPipeline);
             frame.cmd->BindVertexBuffers(1, &mVertexBuffer, &mVertexBinding.GetStride());
 

@@ -54,6 +54,8 @@ private:
     ppx::grfx::ShaderModulePtr      mPS;
     ppx::grfx::PipelineInterfacePtr mPipelineInterface;
     ppx::grfx::GraphicsPipelinePtr  mPipeline;
+    grfx::Viewport                  mViewport;
+    grfx::Rect                      mScissorRect;
 
     // For drawing into the swapchain
     grfx::DescriptorSetLayoutPtr mDrawToSwapchainLayout;
@@ -292,6 +294,9 @@ void ProjApp::Setup()
 
         mPerFrame.push_back(frame);
     }
+
+    mViewport    = {0, 0, float(GetWindowWidth()), float(GetWindowHeight()), 0, 1};
+    mScissorRect = {0, 0, GetWindowWidth(), GetWindowHeight()};
 }
 
 void ProjApp::Render()

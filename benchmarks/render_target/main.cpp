@@ -60,6 +60,8 @@ private:
     ppx::grfx::GraphicsPipelinePtr  mPipeline;
     ppx::grfx::BufferPtr            mVertexBuffer;
     grfx::DrawPassPtr               mDrawPass;
+    grfx::Viewport                  mViewport;
+    grfx::Rect                      mScissorRect;
     grfx::VertexBinding             mVertexBinding;
 
     // Options
@@ -176,6 +178,9 @@ void ProjApp::Setup()
 
         mPerFrame.push_back(frame);
     }
+
+    mViewport    = {0, 0, float(GetWindowWidth()), float(GetWindowHeight()), 0, 1};
+    mScissorRect = {0, 0, GetWindowWidth(), GetWindowHeight()};
 }
 
 void ProjApp::SetupDrawToTexturePass()
@@ -276,6 +281,9 @@ void ProjApp::SetupDrawToTexturePass()
         memcpy(pAddr, vertexData.data(), dataSize);
         mVertexBuffer->UnmapMemory();
     }
+
+    mViewport    = {0, 0, float(mRenderTargetSize.x), float(mRenderTargetSize.y), 0, 1};
+    mScissorRect = {0, 0, mRenderTargetSize.x, mRenderTargetSize.y};
 }
 
 void ProjApp::SetupDrawToSwapchain()
